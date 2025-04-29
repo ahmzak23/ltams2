@@ -1,0 +1,56 @@
+.metrics-dashboard {
+  padding: 20px;
+  
+  .dashboard-header {
+    margin-bottom: 20px;
+    
+    mat-card-actions {
+      padding: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .metrics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    mat-expansion-panel {
+      .metric-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+        padding: 16px;
+      }
+    }
+  }
+
+  .metric-card {
+    mat-card-header {
+      margin-bottom: 16px;
+
+      mat-icon {
+        font-size: 24px;
+        height: 24px;
+        width: 24px;
+        padding: 8px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      mat-card-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      mat-card-subtitle {
+        margin: 4px 0 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1976d2;
+      }
+    }
+  }
+} 

@@ -1,0 +1,66 @@
+<div class="survey-list-container">
+  <div class="header">
+    <h1>Survey Management</h1>
+    <button mat-raised-button color="primary" (click)="createSurvey()">
+      <mat-icon>add</mat-icon>
+      Create New Survey
+    </button>
+  </div>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error" class="survey-grid">
+      <mat-card *ngFor="let survey of surveys" class="survey-card">
+        <mat-card-header>
+          <mat-card-title>{{ survey.title }}</mat-card-title>
+          <mat-card-subtitle>
+            Created: {{ survey.createdAt | date }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p>{{ survey.description }}</p>
+          <div class="survey-stats">
+            <span>
+              <mat-icon>question_answer</mat-icon>
+              {{ survey.questions.length }} Questions
+            </span>
+            <span>
+              <mat-icon>schedule</mat-icon>
+              {{ survey.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="editSurvey(survey)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <button mat-button color="accent" (click)="viewResponses(survey)">
+            <mat-icon>list</mat-icon>
+            Responses
+          </button>
+          <button mat-button color="primary" (click)="viewAnalytics(survey)">
+            <mat-icon>analytics</mat-icon>
+            Analytics
+          </button>
+          <button mat-button color="warn" (click)="deleteSurvey(survey)">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div *ngIf="!loading && !error && surveys.length === 0" class="no-surveys">
+      <mat-icon>assignment</mat-icon>
+      <p>No surveys found. Create your first survey to get started!</p>
+    </div>
+  </div>
+</div> 

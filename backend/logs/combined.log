@@ -1,0 +1,39 @@
+{"level":"info","message":"Backend server listening on port 3000","service":"ltams-backend","timestamp":"2025-04-27T06:07:45.863Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Database connection failed:","service":"ltams-backend","timestamp":"2025-04-27T06:07:45.885Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:18:45.485Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:19:50.267Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:20:15.721Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:22:17.599Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:22:46.099Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:17.743Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:33.338Z"}
+{"level":"info","message":"Backend server listening on port 3000","service":"ltams-backend","timestamp":"2025-04-27T07:03:27.896Z"}
+{"level":"info","message":"Database connection successful","service":"ltams-backend","timestamp":"2025-04-27T07:03:27.921Z"}
+{"count":0,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T07:04:06.023Z"}
+{"count":0,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T07:04:15.264Z"}
+{"level":"info","message":"Creating new survey","service":"ltams-backend","timestamp":"2025-04-27T07:04:19.907Z","title":"Saepe hic incidunt "}
+{"error":"Unknown column 'created_by' in 'field list'","level":"error","message":"Error creating survey","service":"ltams-backend","timestamp":"2025-04-27T07:04:19.909Z"}
+{"level":"info","message":"Creating new survey","service":"ltams-backend","timestamp":"2025-04-27T07:05:25.382Z","title":"Saepe hic incidunt "}
+{"level":"info","message":"Survey created successfully","service":"ltams-backend","surveyId":"1745737525383","timestamp":"2025-04-27T07:05:25.387Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T07:05:25.421Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T07:05:27.552Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T07:05:34.761Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T07:05:39.618Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T07:05:40.529Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T07:08:23.434Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T08:17:22.897Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T08:17:30.315Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T08:17:33.199Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T08:17:35.329Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T08:17:44.264Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T08:17:47.622Z"}
+{"level":"info","message":"Fetched survey by id","service":"ltams-backend","surveyId":"2147483647","timestamp":"2025-04-27T08:17:49.028Z"}
+{"count":1,"level":"info","message":"Fetched all surveys","service":"ltams-backend","timestamp":"2025-04-27T08:17:52.326Z"}
+{"level":"info","message":"Backend server listening on port 3000","service":"ltams-backend","timestamp":"2025-04-27T11:12:56.737Z"}
+{"level":"info","message":"Database connection successful","service":"ltams-backend","timestamp":"2025-04-27T11:12:56.757Z"}
+{"context":{},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged out successfully","service":"ltams-backend","timestamp":"2025-04-27T11:13:47.207Z","userId":null}
+{"context":{"email":"admin@example.com","role":"admin","username":"admin"},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged in successfully","service":"ltams-backend","timestamp":"2025-04-27T11:13:49.859Z","userId":"8f0b62f6-2a76-44b9-b974-1c7204e2b15e"}
+{"context":{"email":"admin@example.com","role":"admin","username":"admin"},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged in successfully","service":"ltams-backend","timestamp":"2025-04-27T11:27:30.429Z","userId":"8f0b62f6-2a76-44b9-b974-1c7204e2b15e"}
+{"context":{"email":"admin@example.com","role":"admin","username":"admin"},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged in successfully","service":"ltams-backend","timestamp":"2025-04-27T11:32:09.732Z","userId":"8f0b62f6-2a76-44b9-b974-1c7204e2b15e"}
+{"context":{"email":"admin@example.com","role":"admin","username":"admin"},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged in successfully","service":"ltams-backend","timestamp":"2025-04-27T12:20:15.671Z","userId":"8f0b62f6-2a76-44b9-b974-1c7204e2b15e"}
+{"context":{"email":"admin@example.com","role":"admin","username":"admin"},"host":"localhost","ipAddress":"::1","level":"info","log_level":"INFO","logtype":"auth","message":"User logged in successfully","service":"ltams-backend","timestamp":"2025-04-27T12:23:33.005Z","userId":"8f0b62f6-2a76-44b9-b974-1c7204e2b15e"}

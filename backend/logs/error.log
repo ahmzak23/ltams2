@@ -1,0 +1,9 @@
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Database connection failed:","service":"ltams-backend","timestamp":"2025-04-27T06:07:45.885Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:18:45.485Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:19:50.267Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:20:15.721Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:22:17.599Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:22:46.099Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:17.743Z"}
+{"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:33.338Z"}
+{"error":"Unknown column 'created_by' in 'field list'","level":"error","message":"Error creating survey","service":"ltams-backend","timestamp":"2025-04-27T07:04:19.909Z"}

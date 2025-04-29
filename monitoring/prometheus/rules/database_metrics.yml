@@ -1,0 +1,73 @@
+groups:
+  - name: database_metrics
+    rules:
+      # Server Health
+      - record: pg_server_health_cpu_usage
+        expr: rate(process_cpu_seconds_total{job="postgres"}[5m]) * 100
+
+      - record: pg_server_health_memory_usage
+        expr: process_resident_memory_bytes{job="postgres"} / 1024 / 1024
+
+      - record: pg_server_health_disk_usage
+        expr: (1 - node_filesystem_avail_bytes{mountpoint="/var/lib/postgresql/data"} / node_filesystem_size_bytes{mountpoint="/var/lib/postgresql/data"}) * 100
+
+      - record: pg_server_health_connections
+        expr: pg_stat_activity_count
+
+      # Query Performance
+      - record: pg_slow_queries_total
+        expr: increase(pg_stat_activity_max_tx_duration{state="active"}[5m])
+
+      - record: pg_query_execution_time
+        expr: rate(pg_stat_statements_total_time_seconds_total[5m])
+
+      # Transaction Logs
+      - record: pg_xlog_size_bytes
+        expr: pg_xlog_size_bytes
+
+      - record: pg_xlog_write_time
+        expr: rate(pg_xlog_sync_total[5m])
+
+      # Lock Monitoring
+      - record: pg_locks_total
+        expr: pg_locks_count{mode="exclusive"}
+
+      - record: pg_blocking_queries
+        expr: pg_stat_activity_count{state="active", waiting="true"}
+
+      # Index Health
+      - record: pg_index_fragmentation
+        expr: pg_stat_user_indexes_idx_blks_hit / (pg_stat_user_indexes_idx_blks_hit + pg_stat_user_indexes_idx_blks_read)
+
+      - record: pg_index_usage
+        expr: rate(pg_stat_user_indexes_idx_scan[5m])
+
+      # Security Audit
+      - record: pg_failed_auth_count
+        expr: increase(pg_stat_database_conflicts_total{conflict_type="lock_timeout"}[5m])
+
+      # SQL Server specific metrics (if using both databases)
+      - record: mssql_server_health_cpu_usage
+        expr: rate(mssql_process_cpu_percent[5m])
+
+      - record: mssql_server_health_memory_usage
+        expr: mssql_process_physical_memory_bytes / 1024 / 1024
+
+      # Alerts
+      - alert: HighDatabaseCPUUsage
+        expr: pg_server_health_cpu_usage > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High database CPU usage
+          description: Database CPU usage is above 80% for 5 minutes
+
+      - alert: LowDiskSpace
+        expr: pg_server_health_disk_usage > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low disk space
+          description: Database disk usage is above 85% 

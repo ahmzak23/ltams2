@@ -1,0 +1,71 @@
+[api]
+enabled = true
+address = "0.0.0.0:8383"
+
+[sources.docker_logs]
+type = "docker_logs"
+include_containers = ["api-gateway", "backend", "python-worker", "node-worker"]
+
+[sources.file_logs]
+type = "file"
+include = ["/var/log/**/*.log"]
+ignore_older_secs = 600
+
+[transforms.parse_json]
+type = "remap"
+inputs = ["docker_logs", "file_logs"]
+source = '''
+. = parse_json!(string!(.message))
+'''
+
+[transforms.add_metadata]
+type = "remap"
+inputs = ["parse_json"]
+source = '''
+.timestamp = parse_timestamp!(.timestamp, format: "%+")
+.environment = get_env_var("ENVIRONMENT") or "production"
+.host = get_env_var("HOSTNAME") or get_hostname()
+'''
+
+[transforms.filter_logs]
+type = "filter"
+inputs = ["add_metadata"]
+condition = '.log_level != "DEBUG" && .log_level != "TRACE"'
+
+[transforms.structure_logs]
+type = "remap"
+inputs = ["filter_logs"]
+source = '''
+.structured_log = {
+  "timestamp": .timestamp,
+  "log_level": .log_level,
+  "service": .service,
+  "environment": .environment,
+  "traceId": .traceId,
+  "userId": .userId,
+  "ipAddress": .ipAddress,
+  "host": .host,
+  "message": .message,
+  "context": .context,
+  "error": .error
+}
+'''
+
+[sinks.loki]
+type = "loki"
+inputs = ["structure_logs"]
+endpoint = "http://loki:3100"
+encoding.codec = "json"
+labels = {service = "{{ service }}", environment = "{{ environment }}", log_level = "{{ log_level }}"}
+healthcheck = true
+out_of_order_action = "accept"
+
+[sinks.prometheus]
+type = "prometheus_exporter"
+inputs = ["structure_logs"]
+address = "0.0.0.0:9598"
+
+[sinks.console]
+type = "console"
+inputs = ["structure_logs"]
+encoding.codec = "json" 

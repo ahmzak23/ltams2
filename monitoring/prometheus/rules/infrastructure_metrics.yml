@@ -1,0 +1,80 @@
+groups:
+  - name: infrastructure_metrics
+    rules:
+      # Server Metrics
+      - record: server_cpu_usage_percent
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+      - record: server_memory_usage_percent
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+
+      - record: server_disk_usage_percent
+        expr: (1 - node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100
+
+      - record: server_network_receive_bytes
+        expr: rate(node_network_receive_bytes_total[5m])
+
+      - record: server_network_transmit_bytes
+        expr: rate(node_network_transmit_bytes_total[5m])
+
+      # Network Metrics
+      - record: network_latency_seconds
+        expr: probe_duration_seconds{job="blackbox"}
+
+      - record: network_dns_lookup_time_seconds
+        expr: probe_dns_lookup_time_seconds{job="blackbox"}
+
+      - record: network_packet_loss_percent
+        expr: rate(node_network_transmit_drop_total[5m]) / rate(node_network_transmit_packets_total[5m]) * 100
+
+      # CI/CD Pipeline
+      - record: pipeline_duration_seconds
+        expr: ci_pipeline_duration_seconds_sum / ci_pipeline_duration_seconds_count
+
+      - record: pipeline_success_rate
+        expr: sum(ci_pipeline_success) / count(ci_pipeline_status) * 100
+
+      - record: deployment_frequency
+        expr: count_over_time(deployment_timestamp[24h])
+
+      # Security Metrics
+      - record: security_vulnerabilities_total
+        expr: sum(security_scan_vulnerabilities) by (severity)
+
+      - record: failed_login_attempts
+        expr: sum(increase(failed_login_counter[1h])) by (source)
+
+      # Cost Metrics
+      - record: resource_cost_per_service
+        expr: sum(container_memory_working_set_bytes * 0.00001) by (service)
+
+      - record: resource_utilization
+        expr: sum(rate(container_cpu_usage_seconds_total[5m])) by (service) / sum(container_spec_cpu_quota) by (service) * 100
+
+      # Alerts
+      - alert: HighCPUUsage
+        expr: server_cpu_usage_percent > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU usage
+          description: Server CPU usage is above 80% for 5 minutes
+
+      - alert: DiskSpaceCritical
+        expr: server_disk_usage_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Critical disk space
+          description: Server disk usage is above 90%
+
+      - alert: HighNetworkLatency
+        expr: network_latency_seconds > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High network latency
+          description: Network latency is above 1 second for 5 minutes 

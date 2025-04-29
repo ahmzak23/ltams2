@@ -1,0 +1,59 @@
+<div class="metrics-dashboard">
+  <mat-card class="dashboard-header">
+    <mat-card-title>Application Metrics Dashboard</mat-card-title>
+    <mat-card-subtitle>Real-time monitoring of application performance and usage</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="generateTestData()">
+        <mat-icon>add_chart</mat-icon>
+        Generate Test Data
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div class="metrics-grid">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Frontend Metrics</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="metric-cards">
+        <mat-card *ngFor="let metric of getMetricsByCategory('Frontend')" class="metric-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>{{metric.icon}}</mat-icon>
+            <mat-card-title>{{metric.title}}</mat-card-title>
+            <mat-card-subtitle>{{metric.value}} {{metric.unit}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>User Metrics</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="metric-cards">
+        <mat-card *ngFor="let metric of getMetricsByCategory('User')" class="metric-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>{{metric.icon}}</mat-icon>
+            <mat-card-title>{{metric.title}}</mat-card-title>
+            <mat-card-subtitle>{{metric.value}} {{metric.unit}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Error Metrics</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="metric-cards">
+        <mat-card *ngFor="let metric of getMetricsByCategory('Error')" class="metric-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>{{metric.icon}}</mat-icon>
+            <mat-card-title>{{metric.title}}</mat-card-title>
+            <mat-card-subtitle>{{metric.value}} {{metric.unit}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div> 

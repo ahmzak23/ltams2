@@ -1,0 +1,77 @@
+groups:
+  - name: business_metrics
+    rules:
+      # User Funnel Metrics
+      - record: user_registration_conversion_rate
+        expr: sum(increase(user_registrations_completed_total[1h])) / sum(increase(user_registrations_started_total[1h])) * 100
+
+      - record: user_onboarding_completion_rate
+        expr: sum(increase(user_onboarding_completed_total[1h])) / sum(increase(user_onboarding_started_total[1h])) * 100
+
+      # Survey Processing Metrics
+      - record: survey_completion_rate
+        expr: sum(increase(surveys_completed_total[1h])) / sum(increase(surveys_started_total[1h])) * 100
+
+      - record: survey_processing_time_seconds
+        expr: histogram_quantile(0.95, sum(rate(survey_processing_duration_seconds_bucket[5m])) by (le))
+
+      - record: survey_response_quality_score
+        expr: avg(survey_response_quality_rating)
+
+      # Business KPIs
+      - record: active_users_total
+        expr: sum(user_session_active) by (user_type)
+
+      - record: revenue_per_user
+        expr: sum(user_revenue_total) / count(user_revenue_total)
+
+      - record: customer_satisfaction_score
+        expr: avg(customer_satisfaction_rating)
+
+      - record: net_promoter_score
+        expr: (sum(nps_promoters) - sum(nps_detractors)) / sum(nps_total) * 100
+
+      # Business Events
+      - record: business_events_total
+        expr: sum(increase(business_event_counter[1h])) by (event_type)
+
+      - record: business_event_success_rate
+        expr: sum(business_event_success) / sum(business_event_total) * 100
+
+      # Customer Journey
+      - record: customer_journey_completion_rate
+        expr: sum(customer_journey_completed) / sum(customer_journey_started) * 100
+
+      - record: customer_journey_dropout_points
+        expr: sum(customer_journey_dropout) by (journey_step)
+
+      - record: customer_journey_time_spent
+        expr: histogram_quantile(0.95, sum(rate(customer_journey_duration_seconds_bucket[1h])) by (le, journey_step))
+
+      # Alerts
+      - alert: LowSurveyCompletionRate
+        expr: survey_completion_rate < 40
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: Low survey completion rate
+          description: Survey completion rate is below 40% for the last hour
+
+      - alert: HighCustomerChurnRate
+        expr: customer_churn_rate > 5
+        for: 24h
+        labels:
+          severity: critical
+        annotations:
+          summary: High customer churn rate
+          description: Customer churn rate is above 5% for the last 24 hours
+
+      - alert: LowCustomerSatisfaction
+        expr: customer_satisfaction_score < 7
+        for: 6h
+        labels:
+          severity: warning
+        annotations:
+          summary: Low customer satisfaction
+          description: Customer satisfaction score is below 7 for the last 6 hours 

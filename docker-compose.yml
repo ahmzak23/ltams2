@@ -1,0 +1,167 @@
+version: '3'
+
+networks:
+  ltams-network:
+    name: ltams-network
+  monitoring:
+    name: monitoring
+
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=ltamsdb
+      - MYSQL_USER=ltams
+      - MYSQL_PASSWORD=ltamspass
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ltams-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - BACKEND_URL=http://backend:3000
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - ltams-network
+      - monitoring
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=info
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=ltams
+      - MYSQL_PASSWORD=ltamspass
+      - MYSQL_DATABASE=ltamsdb
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ltams-network
+      - monitoring
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=info
+    networks:
+      - ltams-network
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      # SMTP Configuration
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=mail.gmail.com:587
+      - GF_SMTP_USER=pintest450@gmail.com
+      - GF_SMTP_PASSWORD=Abcd@1234
+      - GF_SMTP_FROM_ADDRESS=pintest450@gmail.com
+      - GF_SMTP_FROM_NAME=Grafana Alerts
+      - GF_SMTP_STARTTLS_POLICY=MandatoryStartTLS
+    networks:
+      - monitoring
+      - ltams-network
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - monitoring
+      - ltams-network
+
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+      - ltams-network
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    ports:
+      - "9080:9080"
+    volumes:
+      - ./monitoring/promtail/promtail-config.yaml:/etc/promtail/config.yml
+      - ./backend/logs:/app/logs
+      - ./frontend/logs:/app/frontend/logs
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitoring
+      - ltams-network
+
+  tempo:
+    image: grafana/tempo:2.1.0
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+    command: -config.file=/etc/tempo/tempo.yaml
+    volumes:
+      - ./monitoring/tempo:/etc/tempo
+      - tempo_data:/tmp/tempo
+    networks:
+      - monitoring
+      - ltams-network
+
+volumes:
+  mysql_data:
+  grafana-data:
+  prometheus_data:
+  loki_data:
+  tempo_data:

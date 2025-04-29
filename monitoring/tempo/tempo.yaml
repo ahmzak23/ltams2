@@ -1,0 +1,57 @@
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+
+ingester:
+  trace_idle_period: 10s
+  max_block_duration: 5m
+  complete_block_timeout: 5m
+
+compactor:
+  compaction:
+    block_retention: 168h
+    compacted_block_retention: 24h
+    compaction_window: 1h
+    max_block_bytes: 100_000_000
+    max_compaction_objects: 1000000
+    retention_concurrency: 10
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /tmp/tempo/blocks
+    pool:
+      max_workers: 100
+      queue_depth: 10000
+
+limits:
+  max_bytes_per_trace: 50_000_000
+  max_bytes_per_tag_values_query: 5_000_000
+
+search:
+  enabled: true
+
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+      cluster: local
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+
+usage_report:
+  reporting_enabled: false
+
+overrides:
+  per_tenant_override_config: {}
+  metrics_generator_processors: [service-graphs, span-metrics] 

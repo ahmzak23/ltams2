@@ -1,0 +1,45 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: ltams_logs
+          __path__: /var/log/ltams/*.log
+
+  - job_name: backend_logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: backend_logs
+          service: ltams_backend
+          __path__: /backend/logs/*.log
+
+  - job_name: frontend_logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: frontend_logs
+          service: ltams_frontend
+          __path__: /frontend/logs/*.log
+
+  - job_name: auth_logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: auth_logs
+          service: ltams_auth
+          __path__: /var/log/auth.log 

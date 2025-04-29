@@ -1,0 +1,16 @@
+apiVersion: 1
+
+notifiers:
+  - name: SMTP
+    type: email
+    uid: smtp
+    settings:
+      addresses: "pintest450@gmail.com"  # Recipient email address
+      singleEmail: true
+      smtp:
+        host: "mail.gmail.com:587"
+        user: "pintest450@gmail.com"
+        password: "Abcd@1234"
+        fromAddress: "pintest450@gmail.com"
+        fromName: "Grafana Alerts"
+        startTLS_policy: "MandatoryStartTLS"

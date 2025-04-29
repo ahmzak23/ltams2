@@ -1,0 +1,265 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 4,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "Survey Analytics",
+      "type": "row",
+      "collapsed": false,
+      "panels": [
+        {
+          "title": "Survey Completion Funnel",
+          "type": "barchart",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(survey_funnel_total[24h])) by (step)",
+              "legendFormat": "{{step}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "title": "Survey Response Rate",
+          "type": "gauge",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(survey_completed_total[24h])) / sum(rate(survey_started_total[24h])) * 100"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "yellow", "value": 40 },
+                  { "color": "green", "value": 60 }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "User Engagement",
+      "type": "row",
+      "collapsed": false,
+      "panels": [
+        {
+          "title": "Active Users Trend",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(active_users_total) by (user_type)",
+              "legendFormat": "{{user_type}}"
+            }
+          ]
+        },
+        {
+          "title": "User Satisfaction Score",
+          "type": "gauge",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "avg(satisfaction_score)"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "max": 5,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "yellow", "value": 3.5 },
+                  { "color": "green", "value": 4 }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Survey Performance",
+      "type": "row",
+      "collapsed": false,
+      "panels": [
+        {
+          "title": "Survey Response Time Distribution",
+          "type": "heatmap",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "rate(survey_response_time_bucket[5m])"
+            }
+          ]
+        },
+        {
+          "title": "Survey Success Rate by Type",
+          "type": "piechart",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(survey_success_total[24h])) by (survey_type) / sum(rate(survey_total[24h])) by (survey_type) * 100"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Business Impact",
+      "type": "row",
+      "collapsed": false,
+      "panels": [
+        {
+          "title": "Survey Value Generation",
+          "type": "stat",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(survey_value_generated_total)"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD"
+            }
+          }
+        },
+        {
+          "title": "Customer Feedback Impact",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(feedback_impact_score[24h])) by (category)",
+              "legendFormat": "{{category}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Operational Efficiency",
+      "type": "row",
+      "collapsed": false,
+      "panels": [
+        {
+          "title": "Survey Processing Efficiency",
+          "type": "gauge",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "avg(survey_processing_efficiency) * 100"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "yellow", "value": 75 },
+                  { "color": "green", "value": 90 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "Resource Utilization",
+          "type": "timeseries",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(resource_usage_total[5m])) by (resource_type)",
+              "legendFormat": "{{resource_type}}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["business"],
+  "templating": {
+    "list": [
+      {
+        "name": "timeRange",
+        "type": "interval",
+        "query": "1h,6h,12h,24h,7d,30d",
+        "current": {
+          "selected": true,
+          "text": "24h",
+          "value": "24h"
+        }
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Business Team Dashboard",
+  "uid": "business-team",
+  "version": 1,
+  "weekStart": ""
+} 

@@ -1,0 +1,128 @@
+groups:
+  - name: application_metrics
+    rules:
+      # Frontend Metrics
+      - record: frontend_page_load_time_seconds
+        expr: histogram_quantile(0.95, sum(rate(page_load_time_seconds_bucket[5m])) by (le, page))
+
+      - record: frontend_js_errors_total
+        expr: sum(increase(browser_js_errors_total[5m])) by (error_type)
+
+      - record: frontend_api_call_duration_seconds
+        expr: histogram_quantile(0.95, sum(rate(api_call_duration_seconds_bucket[5m])) by (le, endpoint))
+
+      # Backend Metrics
+      - record: backend_api_response_time_seconds
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))
+
+      - record: backend_error_rate
+        expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) * 100
+
+      - record: backend_service_health
+        expr: up{job=~"backend|api-gateway"}
+
+      # Transaction Tracing
+      - record: transaction_duration_seconds
+        expr: histogram_quantile(0.95, sum(rate(transaction_duration_seconds_bucket[5m])) by (le, transaction_type))
+
+      - record: transaction_error_rate
+        expr: sum(rate(transaction_errors_total[5m])) by (transaction_type) / sum(rate(transactions_total[5m])) by (transaction_type) * 100
+
+      # Feature Usage
+      - record: feature_usage_total
+        expr: sum(increase(feature_usage_counter[1h])) by (feature_name)
+
+      - record: feature_error_rate
+        expr: sum(rate(feature_errors_total[5m])) by (feature_name) / sum(rate(feature_usage_counter[5m])) by (feature_name) * 100
+
+      # Deployment Metrics
+      - record: deployment_duration_seconds
+        expr: deployment_duration_seconds_sum / deployment_duration_seconds_count
+
+      - record: deployment_success_rate
+        expr: sum(deployment_success) / count(deployment_status) * 100
+
+      # Security Events
+      - record: security_events_total
+        expr: sum(increase(security_event_counter[1h])) by (event_type)
+
+      # Business Metrics
+      - record: business_transaction_success_rate
+        expr: sum(rate(business_transaction_success[5m])) / sum(rate(business_transaction_total[5m])) * 100
+
+      # Alerts
+      - alert: HighErrorRate
+        expr: backend_error_rate > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High API error rate
+          description: API error rate is above 5% for 5 minutes
+
+      - alert: ServiceDown
+        expr: backend_service_health == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Service is down
+          description: Service has been down for more than 1 minute
+
+      # Frontend metrics
+      - record: page_load_time_seconds_bucket
+        expr: histogram_quantile(0.95, sum(rate(browser_page_load_duration_seconds_bucket[5m])) by (le, route))
+
+      - record: browser_memory_usage_bytes
+        expr: process_resident_memory_bytes{job="frontend"}
+
+      - record: browser_cpu_usage_percent
+        expr: rate(process_cpu_seconds_total{job="frontend"}[1m]) * 100
+
+      # Survey metrics
+      - record: survey_funnel_total
+        expr: sum(survey_events_total) by (step)
+
+      - record: survey_completion_rate
+        expr: sum(survey_completed_total) / sum(survey_started_total) * 100
+
+      - record: survey_processing_duration_seconds_bucket
+        expr: histogram_quantile(0.95, sum(rate(survey_processing_duration_bucket[5m])) by (le))
+
+      # Database metrics
+      - record: pg_query_duration_seconds_bucket
+        expr: histogram_quantile(0.95, sum(rate(pg_stat_statements_total_time_seconds_bucket[5m])) by (le, queryid))
+
+      - record: pg_database_size_bytes
+        expr: pg_database_size_bytes
+
+      # API metrics
+      - record: http_request_duration_seconds_bucket
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))
+
+      # User metrics
+      - record: active_users_total
+        expr: sum(user_session_active) by (user_type)
+
+      - record: satisfaction_score
+        expr: avg(user_satisfaction_rating)
+
+      # Business metrics
+      - record: survey_value_generated_total
+        expr: sum(survey_monetary_value)
+
+      - record: feedback_impact_score
+        expr: sum(feedback_score) by (category)
+
+      # DevOps metrics
+      - record: container_status
+        expr: sum(up) by (container)
+
+      - record: deployment_success_total
+        expr: sum(ci_pipeline_success)
+
+      - record: deployment_total
+        expr: count(ci_pipeline_status)
+
+      - record: resource_usage_total
+        expr: sum(container_memory_usage_bytes) by (container) 
