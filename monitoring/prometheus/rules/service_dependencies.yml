@@ -1,0 +1,30 @@
+groups:
+  - name: service_dependencies
+    rules:
+      - record: service_dependency_requests_total
+        expr: |
+          sum(rate(http_requests_total{service!=""}[5m])) by (service, target_service)
+      
+      - record: service_dependency_errors_total
+        expr: |
+          sum(rate(http_requests_total{status=~"5..",service!=""}[5m])) by (service, target_service)
+      
+      - record: service_dependency_latency
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket{service!=""}[5m])) 
+            by (service, target_service, le)
+          )
+      
+      - record: service_dependency_success_rate
+        expr: |
+          (
+            sum(rate(http_requests_total{status!~"5..",service!=""}[5m])) 
+            by (service, target_service)
+          )
+          /
+          (
+            sum(rate(http_requests_total{service!=""}[5m])) 
+            by (service, target_service)
+          )
+          * 100 

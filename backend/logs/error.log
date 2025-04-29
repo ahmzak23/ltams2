@@ -7,3 +7,9 @@
 {"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:17.743Z"}
 {"error":"Access denied for user 'ltams'@'localhost' (using password: YES)","level":"error","message":"Error fetching surveys","service":"ltams-backend","timestamp":"2025-04-27T06:50:33.338Z"}
 {"error":"Unknown column 'created_by' in 'field list'","level":"error","message":"Error creating survey","service":"ltams-backend","timestamp":"2025-04-27T07:04:19.909Z"}
+{"error":"","level":"error","message":"Database connection failed:","service":"ltams-backend","timestamp":"2025-04-29T09:16:25.271Z"}
+{"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:17:27.276Z","userId":null}
+{"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:17:34.002Z","userId":null}
+{"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:18:49.947Z","userId":null}
+{"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:21:06.740Z","userId":null}
+{"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:22:54.618Z","userId":null}

@@ -52,7 +52,10 @@ const metricsMiddleware = promBundle({
     includePath: true,
     includeStatusCode: true,
     includeUp: true,
-    customLabels: { service: 'api-gateway' },
+    customLabels: { 
+        service: 'api-gateway',
+        target_service: 'backend'
+    },
     promClient: {
         collectDefaultMetrics: {
             timeout: 5000

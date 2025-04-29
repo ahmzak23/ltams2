@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { logger } = require('../logger');
+const db = require('../services/database.service');
+const { v4: uuidv4 } = require('uuid');
 
 // Get all surveys
 router.get('/', async (req, res) => {
   try {
-    // TODO: Implement database integration
-    res.json([]);
+    const surveys = await db.getSurveys();
+    res.json(surveys);
   } catch (error) {
     logger.error('Error fetching surveys:', error);
     res.status(500).json({ error: 'Failed to fetch surveys' });
@@ -17,8 +19,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    // TODO: Implement database integration
-    res.json({ id, title: 'Sample Survey' });
+    const survey = await db.getSurveyById(id);
+    if (!survey) {
+      return res.status(404).json({ error: 'Survey not found' });
+    }
+    res.json(survey);
   } catch (error) {
     logger.error(`Error fetching survey ${req.params.id}:`, error);
     res.status(500).json({ error: 'Failed to fetch survey' });
@@ -28,9 +33,12 @@ router.get('/:id', async (req, res) => {
 // Create new survey
 router.post('/', async (req, res) => {
   try {
-    const survey = req.body;
-    // TODO: Implement database integration
-    res.status(201).json({ id: 'new-id', ...survey });
+    const survey = {
+      id: uuidv4(),
+      ...req.body
+    };
+    const createdSurvey = await db.createSurvey(survey);
+    res.status(201).json(createdSurvey);
   } catch (error) {
     logger.error('Error creating survey:', error);
     res.status(500).json({ error: 'Failed to create survey' });
@@ -42,8 +50,11 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const survey = req.body;
-    // TODO: Implement database integration
-    res.json({ id, ...survey });
+    const updatedSurvey = await db.updateSurvey(id, survey);
+    if (!updatedSurvey) {
+      return res.status(404).json({ error: 'Survey not found' });
+    }
+    res.json(updatedSurvey);
   } catch (error) {
     logger.error(`Error updating survey ${req.params.id}:`, error);
     res.status(500).json({ error: 'Failed to update survey' });
@@ -54,7 +65,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    // TODO: Implement database integration
+    await db.deleteSurvey(id);
     res.status(204).send();
   } catch (error) {
     logger.error(`Error deleting survey ${req.params.id}:`, error);

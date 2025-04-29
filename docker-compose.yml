@@ -87,7 +87,7 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana:10.0.0
+    image: grafana/grafana:11.5.2
     ports:
       - "3001:3000"
     volumes:
