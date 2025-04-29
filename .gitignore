@@ -10,7 +10,8 @@
 ./frontend/dist
 ./backend/dist
 ./api-gateway/dist  
-
+./monitoring/scripts/node_modules
+./monitoring/scripts/dist
 
 
 backend/node_modules
@@ -24,4 +25,5 @@ frontend/dist
 backend/dist
 api-gateway/dist
 frontend/dist
-
+monitoring/scripts/node_modules
+monitoring/scripts/dist

@@ -1,0 +1,16 @@
+groups:
+  - name: rate_limits
+    rules:
+      - alert: HighRequestRate
+        expr: |
+          sum(rate(http_requests_total[1m])) by (client_id, endpoint) > 2
+        for: 1m
+        labels:
+          severity: warning
+          category: rate_limit
+        annotations:
+          summary: High request rate detected
+          description: "Client {{ $labels.client_id }} is making {{ $value }} requests per minute to {{ $labels.endpoint }}"
+          client_id: "{{ $labels.client_id }}"
+          endpoint: "{{ $labels.endpoint }}"
+          timestamp: "{{ $value }}" 

@@ -1,0 +1,20 @@
+{
+  "name": "api-monitoring-test",
+  "version": "1.0.0",
+  "description": "Test script for API monitoring",
+  "main": "generate_test_data.js",
+  "scripts": {
+    "start": "node generate_test_data.js",
+    "server": "node mock_api_server.js",
+    "all": "concurrently \"npm run server\" \"npm run start\""
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "express": "^4.18.2",
+    "prom-client": "^14.2.0",
+    "uuid": "^9.0.1",
+    "winston": "^3.10.0",
+    "winston-loki": "^6.0.8",
+    "concurrently": "^8.2.1"
+  }
+} 

@@ -11,6 +11,7 @@ rule_files:
   - "rules/business_metrics.yml"
   - "rules/alerts.yml"
   - "rules/service_dependencies.yml"
+  - "rules/rate_limits.yml"
 
 alerting:
   alertmanagers:
@@ -21,7 +22,7 @@ alerting:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['prometheus:9090']
+      - targets: ['localhost:9090']
 
   - job_name: 'node'
     static_configs:
@@ -35,6 +36,12 @@ scrape_configs:
     static_configs:
       - targets: ['api-gateway:3000']
     metrics_path: '/metrics'
+    scrape_interval: 5s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [__meta_service_name]
+        target_label: service
 
   - job_name: 'backend'
     static_configs:
@@ -58,4 +65,10 @@ scrape_configs:
   - job_name: 'frontend'
     static_configs:
       - targets: ['frontend:4200']
-    metrics_path: '/metrics' 
+    metrics_path: '/metrics'
+
+  - job_name: 'mock-api-server'
+    static_configs:
+      - targets: ['host.docker.internal:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s 

@@ -1,0 +1,18 @@
+{{ define "telegram.default" }}
+🚨 <b>{{ .Status | toUpper }}</b>
+{{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }}
+
+<b>Alert:</b> {{ .CommonLabels.alertname }}
+<b>Severity:</b> {{ .CommonLabels.severity }}
+<b>Client:</b> {{ .CommonLabels.client_id }}
+<b>Path:</b> {{ .CommonLabels.path }}
+
+{{ range .Alerts }}
+<b>Description:</b> {{ .Annotations.description }}
+<b>Value:</b> {{ .Annotations.value }}
+<b>Started:</b> {{ .StartsAt }}
+{{ if .Labels.instance }}<b>Instance:</b> {{ .Labels.instance }}{{ end }}
+{{ end }}
+
+<a href="{{ .ExternalURL }}">View in Grafana</a>
+{{ end }} 
