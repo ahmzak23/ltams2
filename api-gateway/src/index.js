@@ -11,6 +11,7 @@ const expressWinston = require('express-winston');
 const LokiTransport = require('winston-loki');
 const promBundle = require('express-prom-bundle');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const logsRouter = require('./routes/logs.js');
 
 // Configure OpenTelemetry
 const sdk = new NodeSDK({
@@ -114,6 +115,7 @@ const backendProxy = createProxyMiddleware({
 });
 
 // API routes
+app.use('/api/logs', logsRouter);
 app.use('/api/v1', backendProxy);
 
 // Error handling middleware

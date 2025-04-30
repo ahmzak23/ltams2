@@ -42,4 +42,44 @@ scrape_configs:
         labels:
           job: auth_logs
           service: ltams_auth
-          __path__: /var/log/auth.log 
+          __path__: /var/log/auth.log
+
+  - job_name: browser_console_logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: browser_console_logs
+          service: ltams_frontend
+          __path__: /app/frontend/logs/browser-console.log
+    pipeline_stages:
+      - match:
+          selector: '{job="browser_console_logs"}'
+          stages:
+            - json:
+                expressions:
+                  timestamp: timestamp
+                  log_level: log_level
+                  service: service
+                  environment: environment
+                  traceId: traceId
+                  userId: userId
+                  ipAddress: ipAddress
+                  host: host
+                  message: message
+                  context: context
+                  error: error
+                  business_event: business_event
+            - labels:
+                log_level:
+                service:
+                environment:
+                traceId:
+                userId:
+                ipAddress:
+                host:
+            - timestamp:
+                source: timestamp
+                format: RFC3339
+            - output:
+                source: message 

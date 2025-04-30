@@ -23,6 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Components
 import { AppComponent } from './app.component';
@@ -35,6 +36,7 @@ import { MetricsModule } from './metrics.module';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { AdminComponent } from './components/admin/admin.component';
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -43,6 +45,7 @@ import { SurveyModule } from './survey/survey.module';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin', component: AdminComponent },
   { path: '', redirectTo: '/surveys', pathMatch: 'full' },
   {
     path: 'surveys',
@@ -57,7 +60,8 @@ const routes: Routes = [
     DashboardComponent,
     MetricsDashboardComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +89,7 @@ const routes: Routes = [
     MatProgressBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
     SurveyModule,
     RouterModule.forRoot(routes)
   ],

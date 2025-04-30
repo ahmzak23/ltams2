@@ -14,3 +14,4 @@
 {"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:21:06.740Z","userId":null}
 {"context":{"error":""},"host":"localhost","ipAddress":"::1","level":"error","log_level":"ERROR","logtype":"auth","message":"Error logging in","service":"ltams-backend","timestamp":"2025-04-29T09:22:54.618Z","userId":null}
 {"level":"info","message":"Backend server listening on port 3000","service":"ltams-backend","timestamp":"2025-04-29T09:23:23.655Z"}
+{"level":"info","message":"Backend server listening on port 3000","service":"ltams-backend","timestamp":"2025-04-30T13:17:31.460Z"}
