@@ -114,9 +114,19 @@ const backendProxy = createProxyMiddleware({
     }
 });
 
+// Proxy /api/auth to backend
+const authProxy = createProxyMiddleware({
+    target: 'http://localhost:3002',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/auth/': '/api/auth/'
+    }
+});
+
 // API routes
 app.use('/api/logs', logsRouter);
 app.use('/api/v1', backendProxy);
+app.use('/api/auth', authProxy);
 
 // Error handling middleware
 app.use(expressWinston.errorLogger({
