@@ -120,6 +120,22 @@ The application consists of the following components:
 - [Dashboard Guide](./docs/dashboards.md)
 - [Runbooks](./docs/runbooks.md)
 
+
+
+## To obtain a Telegram bot token,
+1.	Open the Telegram app and search for the "BotFather" bot.
+2.	Start a chat with the BotFather and use the '/newbot' command to create a new bot.
+3.	Follow the instructions provided by the BotFather to choose a name and username for your bot. 
+4.	The BotFather will provide you with a bot token. 
+
+## To Get Chat ID:
+1.	Search for '@userinfobot' in the Telegram app and start a chat with it.
+2.	Send any message to '@userinfobot'. It can be any text message; it doesn't matter.
+3.	The '@userinfobot' will reply with information about your chat, including your chat ID.
+
+
+
+
 ## License
 
 MIT License 

@@ -1,0 +1,168 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 162,
+  "panels": [
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "legend": { "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: <event_type>\" [1m])) by (event_type)",
+          "legendFormat": "{{event_type}}",
+          "queryType": "range"
+        }
+      ],
+      "title": "Event Rate by Type (Last Minute)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "legend": { "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "topk(5, sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: <event_type>\" [1h])) by (event_type))",
+          "legendFormat": "{{event_type}}",
+          "queryType": "range"
+        }
+      ],
+      "title": "Top Event Types (Last Hour)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "legend": { "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "// Requires: Business Event: USER_LOGIN duration=123ms\navg_over_time({job=\"browser_console_logs\"}[5m] | pattern \"<_>Business Event: USER_LOGIN duration=<duration>\" | unwrap duration)",
+          "legendFormat": "Login Duration",
+          "queryType": "range"
+        }
+      ],
+      "title": "Average Login Duration (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "// Requires: Business Event: USER_LOGIN user_id=test_user1\ntopk(5, sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: <event_type> user_id=<user_id>\" [1h])) by (user_id))",
+          "legendFormat": "User {{user_id}}",
+          "queryType": "range"
+        }
+      ],
+      "title": "Most Active Users (Last Hour)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 },
+      "id": 5,
+      "options": {},
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: USER_LOGIN\" [1h]))",
+          "legendFormat": "Total Logins",
+          "queryType": "range"
+        }
+      ],
+      "title": "Total Logins (Last Hour)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 16 },
+      "id": 6,
+      "options": {},
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: SURVEY_CREATED\" [1h]))",
+          "legendFormat": "Surveys Created",
+          "queryType": "range"
+        }
+      ],
+      "title": "Surveys Created (Last Hour)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 16 },
+      "id": 7,
+      "options": {},
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "// Requires: Business Event: USER_LOGIN duration=123ms\navg_over_time({job=\"browser_console_logs\"}[1h] | pattern \"<_>Business Event: USER_LOGIN duration=<duration>\" | unwrap duration)",
+          "legendFormat": "Avg Login Time",
+          "queryType": "range"
+        }
+      ],
+      "title": "Average Login Time (ms)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 16 },
+      "id": 8,
+      "options": {},
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=\"browser_console_logs\"} | pattern \"<_>Business Event: BUTTON_CLICK\" [1h]))",
+          "legendFormat": "Button Clicks",
+          "queryType": "range"
+        }
+      ],
+      "title": "Button Clicks (Last Hour)",
+      "type": "stat"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["business-events", "monitoring"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Website Monitoring Dashboard",
+  "uid": "website-monitoring",
+  "version": 1,
+  "weekStart": ""
+} 
