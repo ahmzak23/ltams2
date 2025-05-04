@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BusinessEventsService } from '../../services/business-events.service';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -63,7 +63,7 @@ export class LoginComponent {
 
   constructor(
     private businessEventsService: BusinessEventsService,
-    private http: HttpClient,
+    private authService: AuthService,
     private router: Router
   ) {
     this.loginStartTime = Date.now();
@@ -82,11 +82,9 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.http.post('/api/auth/login', {
-      username: this.username,
-      password: this.password
-    }).subscribe({
-      next: (response: any) => {
+    
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
         this.businessEventsService.logLogin(
           this.username,
           true,
@@ -95,12 +93,10 @@ export class LoginComponent {
             login_method: 'password'
           }
         );
-        localStorage.setItem('userId', this.username);
-        localStorage.setItem('sessionId', Math.random().toString(36).substring(2));
         this.successMessage = 'Login successful! Redirecting...';
         setTimeout(() => {
-          this.router.navigate(['/admin']);
-          this.businessEventsService.info('Redirected to admin dashboard', { additional: { user: this.username } });
+          this.router.navigate(['/dashboard']);
+          this.businessEventsService.info('Redirected to dashboard', { additional: { user: this.username } });
         }, 1000);
       },
       error: (err) => {

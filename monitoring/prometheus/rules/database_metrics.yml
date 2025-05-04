@@ -70,4 +70,17 @@ groups:
           severity: warning
         annotations:
           summary: Low disk space
-          description: Database disk usage is above 85% 
+          description: Database disk usage is above 85%
+
+      - alert: new_survey_record
+        expr: |
+          increase(mysql_table_rows{db="ltamsdb", table="surveys"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: info
+          service: database
+        annotations:
+          summary: "New survey record added"
+          description: "A new record has been added to the surveys table in the last 5 minutes"
+          dashboard: "Database Metrics"
+          runbook: "https://github.com/your-org/ltams/wiki/Database-Monitoring" 

@@ -71,4 +71,15 @@ scrape_configs:
     static_configs:
       - targets: ['host.docker.internal:3000']
     metrics_path: '/metrics'
-    scrape_interval: 5s 
+    scrape_interval: 5s
+
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql-exporter:9104']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [__meta_service_name]
+        target_label: service 

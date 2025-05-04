@@ -7,6 +7,13 @@ positions:
 
 clients:
   - url: http://loki:3100/loki/api/v1/push
+    batchwait: 1s
+    batchsize: 102400
+    timeout: 10s
+    retry_on_failure: true
+    max_retries: 5
+    min_backoff: 100ms
+    max_backoff: 5s
 
 scrape_configs:
   - job_name: system
@@ -16,6 +23,20 @@ scrape_configs:
         labels:
           job: ltams_logs
           __path__: /var/log/ltams/*.log
+    pipeline_stages:
+      - match:
+          selector: '{job="ltams_logs"}'
+          stages:
+            - json:
+                expressions:
+                  timestamp: timestamp
+                  log_level: log_level
+                  message: message
+            - labels:
+                log_level:
+            - timestamp:
+                source: timestamp
+                format: RFC3339
 
   - job_name: backend_logs
     static_configs:
@@ -25,6 +46,20 @@ scrape_configs:
           job: backend_logs
           service: ltams_backend
           __path__: /backend/logs/*.log
+    pipeline_stages:
+      - match:
+          selector: '{job="backend_logs"}'
+          stages:
+            - json:
+                expressions:
+                  timestamp: timestamp
+                  log_level: log_level
+                  message: message
+            - labels:
+                log_level:
+            - timestamp:
+                source: timestamp
+                format: RFC3339
 
   - job_name: frontend_logs
     static_configs:
@@ -34,15 +69,20 @@ scrape_configs:
           job: frontend_logs
           service: ltams_frontend
           __path__: /frontend/logs/*.log
-
-  - job_name: auth_logs
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: auth_logs
-          service: ltams_auth
-          __path__: /var/log/auth.log
+    pipeline_stages:
+      - match:
+          selector: '{job="frontend_logs"}'
+          stages:
+            - json:
+                expressions:
+                  timestamp: timestamp
+                  log_level: log_level
+                  message: message
+            - labels:
+                log_level:
+            - timestamp:
+                source: timestamp
+                format: RFC3339
 
   - job_name: browser_console_logs
     static_configs:
@@ -70,6 +110,7 @@ scrape_configs:
                   context: context
                   error: error
                   business_event: business_event
+                drop_malformed: true
             - labels:
                 log_level:
                 service:
@@ -82,4 +123,6 @@ scrape_configs:
                 source: timestamp
                 format: RFC3339
             - output:
-                source: message 
+                source: message
+            - drop:
+                expression: ".*__error__.*" 

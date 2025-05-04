@@ -181,7 +181,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "sum(count_over_time({job=~\".+\"} | json | log_level=~\"DEBUG|INFO|WARN|ERROR|FATAL\" [$__interval])) by (log_level)",
+          "expr": "sum(count_over_time({job=~\".+\"} | json | __error__=\"\" | log_level=~\"DEBUG|INFO|WARN|ERROR|FATAL\" [$__interval])) by (log_level)",
           "legendFormat": "{{log_level}}",
           "refId": "A"
         }
@@ -379,7 +379,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "{job=~\".+\"} | json | line_format \"{{.message}} (Service: {{.service}}, Level: {{.log_level}}, User: {{.userId}})\"",
+          "expr": "{job=~\".+\"} | json | __error__='' | line_format \"{{.timestamp}} | {{.service}} | {{.log_level}} | {{.userId}} | {{.message}}\" | sort by timestamp desc",
           "refId": "A"
         }
       ],

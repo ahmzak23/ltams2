@@ -1,0 +1,1 @@
+"expr": "sum(count_over_time({job=~'.+'} | json | __error__='' | log_level=~'DEBUG|INFO|WARN|ERROR|FATAL' [$__interval])) by (log_level)" 
