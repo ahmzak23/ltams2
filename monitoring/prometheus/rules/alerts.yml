@@ -10,7 +10,7 @@ groups:
         annotations:
           summary: High error rate detected for {{ $labels.service }}
           description: Error rate is above 5% for the last 5 minutes
-          runbook_url: https://wiki.example.com/runbooks/high-error-rate
+          runbook_url: https://wiki.example.com/abc
 
       - alert: SlowAPIResponse
         expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)) > 2
